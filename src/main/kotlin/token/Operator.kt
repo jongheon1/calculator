@@ -8,46 +8,61 @@ sealed interface Operator : Token {
     fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal
 }
 
-class PlusOperator : Operator {
+object PlusOperator : Operator {
     override val symbol: String = "+"
     override val precedence: Int = 1
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.add(right)
 }
 
-class MinusOperator : Operator {
+object MinusOperator : Operator {
     override val symbol: String = "-"
     override val precedence: Int = 1
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.minus(right)
 }
 
-class MultiplicationOperator : Operator {
+object MultiplyOperator : Operator {
     override val symbol: String = "*"
     override val precedence: Int = 2
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.multiply(right)
 }
 
-class DivisionOperator : Operator {
+object DivideOperator : Operator {
     override val symbol: String = "/"
     override val precedence: Int = 2
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.divide(right)
 }
 
-class LeftParenthesis : Operator {
+object LeftParenthesis : Operator {
     override val symbol: String = "("
     override val precedence: Int = 3
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         throw UnsupportedOperationException("Parenthesis cannot perform calculation")
 }
 
-class RightParenthesis : Operator {
+object RightParenthesis : Operator {
     override val symbol: String = ")"
     override val precedence: Int = 3
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         throw UnsupportedOperationException("Parenthesis cannot perform calculation")
+}
+
+
+object OperatorFactory {
+
+    fun fromSymbol(symbol: String): Operator = when(symbol) {
+        PlusOperator.symbol -> PlusOperator
+        MinusOperator.symbol -> MinusOperator
+        MultiplyOperator.symbol -> MultiplyOperator
+        DivideOperator.symbol -> DivideOperator
+        LeftParenthesis.symbol -> LeftParenthesis
+        RightParenthesis.symbol -> RightParenthesis
+        else -> throw IllegalArgumentException("Unknown operator: $symbol")
+    }
+
 }
 
 
