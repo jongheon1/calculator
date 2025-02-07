@@ -1,3 +1,5 @@
 package token
 
-class Operand(val value: Double) : Token
+import java.math.BigDecimal
+
+class Operand(val value: BigDecimal) : Token
