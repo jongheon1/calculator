@@ -1,8 +1,6 @@
 package calculator
 
-import token.Operand
-import token.OperatorFactory
-import token.Token
+import token.*
 import java.math.BigDecimal
 
 class Parser {
@@ -13,9 +11,13 @@ class Parser {
 
         fun addOperandIfPresent() {
             if (operandBuilder.isNotEmpty()) {
-                val operand = Operand(BigDecimal(operandBuilder.toString()))
-                tokens.add(operand)
-                operandBuilder.clear()
+                try {
+                    val operand = Operand(BigDecimal(operandBuilder.toString()))
+                    tokens.add(operand)
+                    operandBuilder.clear()
+                } catch (e: NumberFormatException) {
+                    throw IllegalArgumentException("Invalid number format in expression: $operandBuilder", e)
+                }
             }
         }
 
@@ -24,7 +26,14 @@ class Parser {
                 char.isDigit() || char == '.' -> operandBuilder.append(char)
                 char.isWhitespace() -> addOperandIfPresent()
                 char == '-' -> {
-                    
+                    addOperandIfPresent()
+
+                    if (tokens.isEmpty() ||
+                        (tokens.last() is Operator && tokens.last() !is RightParenthesis)) {
+                        operandBuilder.append(char)
+                    } else {
+                        tokens.add(MinusOperator)
+                    }
                 }
                 else -> {
                     addOperandIfPresent()
@@ -33,8 +42,9 @@ class Parser {
                 }
             }
         }
+        addOperandIfPresent()
 
-
+        return tokens
     }
 }
 
