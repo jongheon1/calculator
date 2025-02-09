@@ -5,49 +5,51 @@ import java.math.BigDecimal
 sealed interface Operator : Token {
     val symbol: String
     val precedence: Int
+}
+
+sealed interface BinaryOperator : Operator {
     fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal
 }
 
-object PlusOperator : Operator {
+object PlusOperator : BinaryOperator {
     override val symbol: String = "+"
     override val precedence: Int = 1
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.add(right)
 }
 
-object MinusOperator : Operator {
+object MinusOperator : BinaryOperator {
     override val symbol: String = "-"
     override val precedence: Int = 1
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.minus(right)
 }
 
-object MultiplyOperator : Operator {
+object MultiplyOperator : BinaryOperator {
     override val symbol: String = "*"
     override val precedence: Int = 2
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.multiply(right)
 }
 
-object DivideOperator : Operator {
+object DivideOperator : BinaryOperator {
     override val symbol: String = "/"
     override val precedence: Int = 2
     override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
         left.divide(right)
 }
 
-object LeftParenthesis : Operator {
+
+sealed interface Parenthesis : Operator
+
+object LeftParenthesis : Parenthesis {
     override val symbol: String = "("
     override val precedence: Int = 3
-    override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
-        throw UnsupportedOperationException("Parenthesis cannot perform calculation")
 }
 
-object RightParenthesis : Operator {
+object RightParenthesis : Parenthesis {
     override val symbol: String = ")"
     override val precedence: Int = 3
-    override fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
-        throw UnsupportedOperationException("Parenthesis cannot perform calculation")
 }
 
 
@@ -63,20 +65,4 @@ object OperatorFactory {
         else -> throw IllegalArgumentException("Unknown operator: $symbol")
     }
 
-}
-
-
-
-enum class OperatorEnum(
-    val symbol: String,
-    val precedence: Int
-) : Token {
-    PLUS("+", 1),
-    MINUS("-", 1);
-
-    fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal =
-        when(this) {
-            PLUS -> left.add(right)
-            MINUS -> left.minus(right)
-        }
 }
