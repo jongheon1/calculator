@@ -60,19 +60,16 @@ class CalculatorIntegrationTest {
 
     @Test
     fun `여러 연산자가 혼합된 수식`() {
-        // 1 + 2 * 3 - 4 / 2 = 5
         assertEquals(
             expected = BigDecimal("5"),
             actual = processExpression("1 + 2 * 3 - 4 / 2")
         )
 
-        // (1 + 2) * 3 - 4 / (1 + 1) = 7
         assertEquals(
             expected = BigDecimal("7"),
             actual = processExpression("(1 + 2) * 3 - 4 / (1 + 1)")
         )
 
-        // (-1 * 2) + 3 + -4 / (1 * 1) = -3
         assertEquals(
             expected = BigDecimal("-3"),
             actual = processExpression("(-1 * 2) + 3 + -4 / (1 * 1)")
@@ -201,6 +198,21 @@ class CalculatorIntegrationTest {
             processExpression("1 + ()")
         }
 
+        // 괄호 앞에 피연산자
+        assertThrows<IllegalArgumentException> {
+            processExpression("1 +  1(1+1)")
+        }
+
+        // 괄호 앞에 연산자
+        assertThrows<IllegalArgumentException> {
+            processExpression("(1+)")
+        }
+
+        // 연산자 앞에 괄호
+        assertThrows<IllegalArgumentException> {
+            processExpression("(+1)")
+        }
+
         // 0으로 나누기
         assertThrows<IllegalArgumentException> {
             processExpression("1 / 0")
@@ -209,6 +221,11 @@ class CalculatorIntegrationTest {
         // 소수점이 연속으로 있는 경우
         assertThrows<IllegalArgumentException> {
             processExpression("1..5 + 2")
+        }
+
+        // 연속된 피연산자
+        assertThrows<IllegalArgumentException> {
+            processExpression("1 1 + 2")
         }
     }
 }
