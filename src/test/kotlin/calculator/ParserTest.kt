@@ -1,11 +1,9 @@
 package calculator
 
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 import token.*
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
-import kotlin.test.assertFails
 
 class ParserTest {
 

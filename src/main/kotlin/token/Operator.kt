@@ -8,6 +8,7 @@ sealed interface Operator : Token {
 }
 
 sealed interface BinaryOperator : Operator {
+    // 인자를 Operand 로 받고 계산의 실제 구현부는 Operand 에다가 해도 ㄱㅊ을 듯
     fun calculate(left: BigDecimal, right: BigDecimal): BigDecimal
 }
 
