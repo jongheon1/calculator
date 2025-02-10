@@ -1,7 +1,6 @@
 import calculator.Calculator
 import org.junit.jupiter.api.assertThrows
 import token.*
-import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,7 +18,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal(3),
+            expected = Operand(3),
             actual = result
         )
     }
@@ -35,7 +34,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal(20),
+            expected = Operand(20),
             actual = result
         )
     }
@@ -54,7 +53,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal(7),
+            expected = Operand(7),
             actual = result
         )
     }
@@ -77,7 +76,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal("7.8"),
+            expected = Operand(7.8),
             actual = result
         )
     }
@@ -94,7 +93,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal(-3),
+            expected = Operand(-3),
             actual = result
         )
     }
@@ -119,7 +118,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal(42),
+            expected = Operand(42),
             actual = result
         )
     }
@@ -135,7 +134,7 @@ class CalculatorTest {
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal("99999980000001"),
+            expected = Operand(99999980000001),
             actual = result
         )
     }
@@ -143,15 +142,15 @@ class CalculatorTest {
     @Test
     fun `소수점이 있는 연산`() {
         val tokens = listOf(
-            Operand(BigDecimal("1.5")),
-            Operand(BigDecimal("2.3")),
+            Operand(1.5),
+            Operand(2.3),
             PlusOperator
         )
 
         val result = calculator.calculate(tokens)
 
         assertEquals(
-            expected = BigDecimal("3.8"),
+            expected = Operand(3.8),
             actual = result
         )
     }

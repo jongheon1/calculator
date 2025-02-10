@@ -2,7 +2,7 @@ import calculator.Calculator
 import calculator.Parser
 import calculator.PostfixConverter
 import org.junit.jupiter.api.assertThrows
-import java.math.BigDecimal
+import token.Operand
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,7 +11,7 @@ class CalculatorIntegrationTest {
     private val converter = PostfixConverter()
     private val calculator = Calculator()
 
-    private fun processExpression(input: String): BigDecimal {
+    private fun processExpression(input: String): Operand {
         val tokens = parser.parse(input)
         val postfixTokens = converter.convertToPostfix(tokens)
         return calculator.calculate(postfixTokens)
@@ -20,19 +20,19 @@ class CalculatorIntegrationTest {
     @Test
     fun `기본 사칙연산`() {
         assertEquals(
-            expected = BigDecimal("3"),
+            expected = Operand(3),
             actual = processExpression("1 + 2")
         )
         assertEquals(
-            expected =  BigDecimal("-1"),
+            expected =  Operand(-1),
             actual =  processExpression("1 - 2")
         )
         assertEquals(
-            expected = BigDecimal("6"),
+            expected = Operand(6),
             actual =  processExpression("2 * 3")
         )
         assertEquals(
-            expected =  BigDecimal("2"),
+            expected =  Operand(2),
             actual =  processExpression("4 / 2")
         )
     }
@@ -41,19 +41,19 @@ class CalculatorIntegrationTest {
     fun `복잡한 수식 계산`() {
         // 1 + 2 * 3 = 7
         assertEquals(
-            expected = BigDecimal("7"),
+            expected = Operand(7),
             actual = processExpression("1 + 2 * 3")
         )
 
         // (1 + 2) * 3 = 9
         assertEquals(
-            expected = BigDecimal("9"),
+            expected = Operand(9),
             actual = processExpression("(1 + 2) * 3")
         )
 
         // ((1 + 2) * (3 + 4)) = 21
         assertEquals(
-            expected = BigDecimal("21"),
+            expected = Operand(21),
             actual = processExpression("((1 + 2) * (3 + 4))")
         )
     }
@@ -61,17 +61,17 @@ class CalculatorIntegrationTest {
     @Test
     fun `여러 연산자가 혼합된 수식`() {
         assertEquals(
-            expected = BigDecimal("5"),
+            expected = Operand(5),
             actual = processExpression("1 + 2 * 3 - 4 / 2")
         )
 
         assertEquals(
-            expected = BigDecimal("7"),
+            expected = Operand(7),
             actual = processExpression("(1 + 2) * 3 - 4 / (1 + 1)")
         )
 
         assertEquals(
-            expected = BigDecimal("-3"),
+            expected = Operand(-3),
             actual = processExpression("(-1 * 2) + 3 + -4 / (1 * 1)")
         )
     }
@@ -79,23 +79,23 @@ class CalculatorIntegrationTest {
     @Test
     fun `음수를 포함한 수식`() {
         assertEquals(
-            expected = BigDecimal("-1"),
+            expected = Operand(-1),
             actual = processExpression("-1")
         )
         assertEquals(
-            expected = BigDecimal("1"),
+            expected = Operand(1),
             actual = processExpression("2 + -1")
         )
         assertEquals(
-            expected = BigDecimal("-6"),
+            expected = Operand(-6),
             actual = processExpression("-2 * 3")
         )
         assertEquals(
-            expected = BigDecimal("-1"),
+            expected = Operand(-1),
             actual = processExpression("-2 + 1")
         )
         assertEquals(
-            expected = BigDecimal("-5"),
+            expected = Operand(-5),
             actual = processExpression("(-2 - 3)")
         )
     }
@@ -103,19 +103,19 @@ class CalculatorIntegrationTest {
     @Test
     fun `소수점이 포함된 수식`() {
         assertEquals(
-            expected = BigDecimal("3.5"),
+            expected = Operand(3.5),
             actual = processExpression("1.5 + 2")
         )
         assertEquals(
-            expected = BigDecimal("3.75"),
+            expected = Operand(3.75),
             actual = processExpression("1.5 * 2.5")
         )
         assertEquals(
-            expected = BigDecimal("0.5"),
+            expected = Operand(0.5),
             actual = processExpression("2.5 - 2")
         )
         assertEquals(
-            expected = BigDecimal("0.5"),
+            expected = Operand(0.5),
             actual = processExpression("1 / 2")
         )
     }
@@ -123,19 +123,19 @@ class CalculatorIntegrationTest {
     @Test
     fun `공백이 다양하게 포함된 수식`() {
         assertEquals(
-            expected = BigDecimal("3"),
+            expected = Operand(3),
             actual = processExpression("1+2")
         )
         assertEquals(
-            expected = BigDecimal("3"),
+            expected = Operand(3),
             actual = processExpression("1 + 2")
         )
         assertEquals(
-            expected = BigDecimal("3"),
+            expected = Operand(3),
             actual = processExpression(" 1 + 2 ")
         )
         assertEquals(
-            expected = BigDecimal("3"),
+            expected = Operand(3),
             actual = processExpression("1    +    2")
         )
     }
@@ -144,13 +144,13 @@ class CalculatorIntegrationTest {
     fun `중첩된 복잡한 괄호 수식`() {
         // (1 + (2 + 3) * (4 + 5)) = 46
         assertEquals(
-            expected = BigDecimal("46"),
+            expected = Operand(46),
             actual = processExpression("(1 + (2 + 3) * (4 + 5))")
         )
 
         // ((1 + 2) * 3 + (4 * 5)) = 29
         assertEquals(
-            expected = BigDecimal("29"),
+            expected = Operand(29),
             actual = processExpression("((1 + 2) * 3 + (4 * 5))")
         )
     }
@@ -158,7 +158,7 @@ class CalculatorIntegrationTest {
     @Test
     fun `큰 숫자의 연산`() {
         assertEquals(
-            expected = BigDecimal("99999980000001"),
+            expected = Operand(99999980000001L),
             actual = processExpression("9999999 * 9999999")
         )
     }
