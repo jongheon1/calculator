@@ -4,7 +4,7 @@ import token.*
 import java.math.BigDecimal
 
 class Calculator {
-    fun calculate(tokens: List<Token>): BigDecimal {
+    fun calculate(tokens: List<Token>): Operand {
 
         val stack = ArrayDeque<Operand>()
 
@@ -26,6 +26,6 @@ class Calculator {
         }
 
         check(stack.size == 1)
-        return stack.last().value
+        return stack.last()
     }
 }
