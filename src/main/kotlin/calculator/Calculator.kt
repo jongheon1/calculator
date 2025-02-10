@@ -12,18 +12,14 @@ class Calculator {
             when (token) {
                 is Operand -> stack.add(token)
                 is BinaryOperator -> {
-//                    check(stack.size >= 2) { "Unexpected state: insufficient operands" }
                     val right = stack.removeLast()
                     val left = stack.removeLast()
                     val result = try {
-                        token.calculate(
-                            left = left.value,
-                            right = right.value
-                        )
+                        token.calculate(left, right)
                     } catch (e: ArithmeticException) {
                         throw IllegalArgumentException("Arithmetic error: ${e.message}")
                     }
-                    stack.add(Operand(value = result))
+                    stack.add(result)
                 }
                 is Parenthesis -> throw IllegalArgumentException("Unexpected parenthesis in calculation")
             }
