@@ -118,6 +118,14 @@ class CalculatorIntegrationTest {
             expected = Operand(0.5),
             actual = processExpression("1 / 2")
         )
+        assertEquals(
+            expected = "0.3333",
+            actual = processExpression("1/3").toString()
+        )
+        assertEquals(
+            expected = "1",
+            actual = processExpression("1/3*3").toString()
+        )
     }
 
     @Test
