@@ -37,7 +37,21 @@ object DivideOperator : BinaryOperator {
     override val symbol: String = "/"
     override val precedence: Int = 2
     override fun calculate(left: Operand, right: Operand): Operand =
-        left.divide(right) // 0.333... 끝부분 처리, 1.0000... 자연수 부분만 보이도록 처리 해야 함
+        left.divide(right)
+}
+
+object ModOperator : BinaryOperator {
+    override val symbol: String = "%"
+    override val precedence: Int = 2
+    override fun calculate(left: Operand, right: Operand): Operand =
+        left.mod(right)
+}
+
+object PowerOperator : BinaryOperator {
+    override val symbol: String = "^"
+    override val precedence: Int = 3
+    override fun calculate(left: Operand, right: Operand): Operand =
+        left.pow(right)
 }
 
 
@@ -61,6 +75,8 @@ object OperatorFactory {
         MinusOperator.symbol -> MinusOperator
         MultiplyOperator.symbol -> MultiplyOperator
         DivideOperator.symbol -> DivideOperator
+        ModOperator.symbol -> ModOperator
+        PowerOperator.symbol -> PowerOperator
         LeftParenthesis.symbol -> LeftParenthesis
         RightParenthesis.symbol -> RightParenthesis
         else -> throw IllegalArgumentException("Unknown operator: $symbol")

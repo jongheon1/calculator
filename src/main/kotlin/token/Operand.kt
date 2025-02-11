@@ -27,6 +27,12 @@ data class Operand(val value: BigDecimal) : Token {
     fun divide(rhs: Operand): Operand =
         Operand(this.value.divide(rhs.value, CALCULATION_CONTEXT))
 
+    fun mod(rhs: Operand): Operand =
+        Operand(this.value.remainder(rhs.value, CALCULATION_CONTEXT))
+
+    fun pow(rhs: Operand): Operand =
+        Operand(this.value.pow(rhs.value.toInt(), CALCULATION_CONTEXT)) // int 가 아닌 값으로 나누면 에러 나오도록 수정 해야 함
+
     override fun toString(): String =
         value.round(DISPLAY_CONTEXT)
             .stripTrailingZeros()
